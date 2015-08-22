@@ -1,0 +1,23 @@
+{
+  "name": "sb-communication",
+  "version": "0.0.1",
+  "description": "A communication library for communication libraries",
+  "main": "dist/main.js",
+  "dependencies": {
+    "zm-event-kit": "^1.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/steelbrain/SB-Communication.git"
+  },
+  "author": "steelbrain",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/steelbrain/SB-Communication/issues"
+  },
+  "homepage": "https://github.com/steelbrain/SB-Communication#readme"
+}
