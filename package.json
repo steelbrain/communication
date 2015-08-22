@@ -3,13 +3,14 @@
   "version": "0.0.1",
   "description": "A communication library for communication libraries",
   "main": "dist/main.js",
+  "browser": "dist/main.browser.js",
   "dependencies": {
     "zm-event-kit": "^1.0.2"
   },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "compile": "uc-compile lib/main.js --Compress --Babel --Browserify > dist/main.js"
+    "compile": "uc-compile lib/main.js --Compress --Babel > dist/main.js; uc-compile lib/main.js --Compress --Browserify --Babel > dist/main.browser.js"
   },
   "repository": {
     "type": "git",
