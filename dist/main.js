@@ -13,19 +13,16 @@ var EventEmitter = require('zm-event-kit').Emitter;
 var Communication = (function (_EventEmitter) {
   _inherits(Communication, _EventEmitter);
 
-  function Communication(sendCallback, debug) {
+  function Communication(debug) {
     _classCallCheck(this, Communication);
 
     _get(Object.getPrototypeOf(Communication.prototype), 'constructor', this).call(this);
-    this.send = sendCallback;
     this.debug = debug;
   }
 
   _createClass(Communication, [{
     key: 'gotMessage',
-    value: function gotMessage(message) {
-      var _this = this;
-
+    value: function gotMessage(sendCallback, message) {
       if (!message.SB) return;
       if (this.debug) console.debug(message);
 
@@ -39,12 +36,12 @@ var Communication = (function (_EventEmitter) {
           response = Promise.reject(err);
         }
         response.then(function (retVal) {
-          _this.send({ Genre: 'response', Status: true, Result: retVal, ID: message.ID, SB: true });
+          sendCallback({ Genre: 'response', Status: true, Result: retVal, ID: message.ID, SB: true });
         }, function (retVal) {
           if (retVal instanceof Error) {
             retVal = { stack: retVal.stack, message: retVal.message };
           }
-          _this.send({ Genre: 'response', Status: false, Result: retVal, ID: message.ID, SB: true });
+          sendCallback({ Genre: 'response', Status: false, Result: retVal, ID: message.ID, SB: true });
         });
       } else if (message.Genre === 'response') {
         this.emit('JOB:' + message.ID, message);
@@ -52,16 +49,16 @@ var Communication = (function (_EventEmitter) {
     }
   }, {
     key: 'request',
-    value: function request(type, message) {
-      var _this2 = this;
+    value: function request(sendCallback, type, message) {
+      var _this = this;
 
       return new Promise(function (resolve, reject) {
         var JobID = Communication.randomId();
-        var disposable = _this2.on('JOB:' + JobID, function (Message) {
+        var disposable = _this.on('JOB:' + JobID, function (Message) {
           disposable.dispose();
           if (Message.Status) resolve(Message.Result);else reject(Message.Result);
         });
-        _this2.send({ Type: type, Genre: 'send', Message: message, SB: true, ID: JobID });
+        sendCallback({ Type: type, Genre: 'send', Message: message, SB: true, ID: JobID });
       });
     }
   }], [{

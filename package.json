@@ -1,6 +1,6 @@
 {
   "name": "sb-communication",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A communication library for communication libraries",
   "main": "dist/main.js",
   "browser": "dist/main.browser.js",
