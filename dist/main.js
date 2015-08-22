@@ -27,11 +27,11 @@ var Communication = (function (_EventEmitter) {
       if (this.debug) console.debug(message);
 
       if (message.Genre === 'send') {
-        message.response = null;
+        message.Response = null;
         var response = undefined;
         try {
           this.emit(message.Type, message);
-          response = message.response instanceof Promise ? message.response : Promise.resolve(message.response);
+          response = message.Response instanceof Promise ? message.Response : Promise.resolve(message.Response);
         } catch (err) {
           response = Promise.reject(err);
         }
