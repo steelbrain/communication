@@ -39,11 +39,24 @@ var Communication = (function (_EventEmitter) {
           sendCallback({ Genre: 'response', Status: true, Result: retVal, ID: message.ID, SB: true });
         }, function (retVal) {
           if (retVal instanceof Error) {
-            retVal = { stack: retVal.stack, message: retVal.message };
+            (function () {
+              var error = { __sb_is_error: true };
+              Object.getOwnPropertyNames(retVal).forEach(function (key) {
+                error[key] = retVal[key];
+              });
+              retVal = error;
+            })();
           }
           sendCallback({ Genre: 'response', Status: false, Result: retVal, ID: message.ID, SB: true });
         });
       } else if (message.Genre === 'response') {
+        if (message.Result && typeof message.Result === 'object' && message.Result.__sb_is_error) {
+          var error = new Error();
+          for (var key in message.Result) {
+            if (key !== '__sb_is_error') error[key] = message.Result[key];
+          }
+          message.Result = error;
+        }
         this.emit('JOB:' + message.ID, message);
       }
     }
