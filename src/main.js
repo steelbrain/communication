@@ -12,7 +12,7 @@ export default class Communication {
       message.response = null
 
       const response = new Promise(resolve => {
-        this.emitter.emit(`request:${message.type}`, message.data, message)
+        this.emitter.emit(`request:${message.name}`, message.data, message)
         resolve()
       })
 
@@ -34,7 +34,8 @@ export default class Communication {
       })
     })
     this.emitter.on('response', message => {
-      this.emitter.emit(`job:${message.id}`, message.data && message.data.__sb_is_error ? Communication.createError(message.data) : message.data)
+      message.data = message.data && message.data.__sb_is_error ? Communication.createError(message.data) : message.data
+      this.emitter.emit(`job:${message.id}`, message)
     })
   }
   parseMessage(messageGiven) {
@@ -53,7 +54,7 @@ export default class Communication {
     }
     this.emitter.emit(message.type, message)
   }
-  request(name, data) {
+  request(name, data = {}) {
     return new Promise((resolve, reject) => {
       const id = Communication.randomId()
       const disposable = this.emitter.on(`job:${id}`, function(result) {
@@ -67,7 +68,10 @@ export default class Communication {
       })
     })
   }
-  onSend(callback) {
+  onRequest(name, callback) {
+    return this.emitter.on(`request:${name}`, callback)
+  }
+  onShouldSend(callback) {
     return this.emitter.on('send', callback)
   }
   dispose() {
