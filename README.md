@@ -1,9 +1,37 @@
 SB-Communication
 ================
 
-SB-Communication is a communication library meant to be used by other communication libraries.
-It provides a base for promise-based communication. Currently `childprocess-promise` and `worker-exchange` are using it.
+SB-Communication is a base communication low-level library meant to be used in other communication libraries.
+It allows promise-based communication on both ends, You must write a wrapper for it for your use-case specific
+stream, socket or resource though. It works in both browsers and node!
 
-### LICENSE
+#### Example Communication Implementation
+
+```js
+'use babel'
+
+import Communication from 'sb-communication'
+
+const worker = new WebWorker('worker.js')
+const wrapper = new Communication()
+
+worker.onmessage = function(message) {
+  wrapper.parseMessage(message.data)
+}
+wrapper.onShouldSend(function(data) {
+  worker.postMessage(data)
+})
+
+// Event-Specific bindings
+wrapper.onRequest('count-pi', function(data, message) {
+  console.log(data)
+  message.response = new Promise(function(resolve, reject) {
+    message.response = "Something else"
+    resolve()
+  })
+})
+```
+
+#### LICENSE
 
 This project is licensed under the terms of MIT License.
