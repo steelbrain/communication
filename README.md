@@ -32,6 +32,18 @@ wrapper.onRequest('count-pi', function(data, message) {
 })
 ```
 
+#### Shape
+
+
+```js
+const message<T> = {
+  id: String,
+  name: String,
+  type: 'request',
+  data: T
+}
+```
+
 #### LICENSE
 
 This project is licensed under the terms of MIT License.
