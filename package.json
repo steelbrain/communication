@@ -2,8 +2,8 @@
   "name": "sb-communication",
   "version": "3.1.0",
   "description": "A communication library for communication libraries",
-  "main": "dist/main.js",
-  "browser": "dist/main.min.js",
+  "main": "lib/main.js",
+  "jsnext:main": "src/main.js",
   "dependencies": {
     "sb-event-kit": "^1.0.1"
   },
