@@ -13,7 +13,8 @@
   },
   "scripts": {
     "test": "apm test",
-    "compile": "ucompiler go src"
+    "compile": "ucompiler go src",
+    "dist": "browserify lib/main.js --standalone EventKit > sb-communication.js && git add sb-communication.js && git commit -m ':arrow_up: Upgrade dist file'"
   },
   "repository": {
     "type": "git",
