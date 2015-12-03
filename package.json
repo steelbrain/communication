@@ -12,8 +12,8 @@
     "babel-preset-steelbrain-legacy": "^1.0.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "compile": "uc-compile lib/main.js --Babel > dist/main.js; uc-compile lib/main.js --Compress --Babel > dist/main.min.js"
+    "test": "apm test",
+    "compile": "ucompiler go src"
   },
   "repository": {
     "type": "git",
