@@ -32,6 +32,19 @@ wrapper.onRequest('count-pi', function(data, message) {
 })
 ```
 
+#### API
+
+```js
+export default class Communication {
+  constructor(debug: Boolean)
+  parseMessage(message: String | Object)
+  request(type: String, data: Mixed)
+  onRequest(type: String, callback: Function)
+  onShouldSend(callback: Function)
+  dispose()
+}
+```
+
 #### Message
 This is the shape of the message object you get on request handlers
 
