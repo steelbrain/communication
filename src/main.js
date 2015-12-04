@@ -13,10 +13,11 @@ export default class Communication {
 
       const response = new Promise(resolve => {
         this.emitter.emit(`request:${message.name}`, message.data, message)
-        resolve()
+        resolve(message.response)
       })
 
-      response.then(function() {
+      response.then(function(response) {
+        message.response = response
         return true
       }, function(val) {
         if (val instanceof Error) {
