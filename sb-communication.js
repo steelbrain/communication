@@ -138,7 +138,6 @@ class Emitter {
   }
 }
 exports.Emitter = Emitter;
-
 },{"./disposable":2}],4:[function(require,module,exports){
 'use strict';
 'use babel';
@@ -196,10 +195,11 @@ class Communication {
 
       const response = new Promise(function (resolve) {
         _this.emitter.emit(`request:${ message.name }`, message.data, message);
-        resolve();
+        resolve(message.response);
       });
 
-      response.then(function () {
+      response.then(function (response) {
+        message.response = response;
         return true;
       }, function (val) {
         if (val instanceof Error) {
