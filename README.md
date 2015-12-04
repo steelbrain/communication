@@ -32,15 +32,16 @@ wrapper.onRequest('count-pi', function(data, message) {
 })
 ```
 
-#### Shape
-
+#### Message
+This is the shape of the message object you get on request handlers
 
 ```js
 const message<T> = {
   id: String,
   name: String,
   type: 'request',
-  data: T
+  data: T,
+  response: ?mixed
 }
 ```
 
