@@ -6,22 +6,16 @@ type Handle = {|
   send(payload: Object): void,
   listener(callback: (message: Object) => void): void,
 |}
-type Options = {|
-  timeout: number,
-|}
 
 class Communication {
   alive: boolean
   handle: Handle
   handlers: { [string]: Function } = {}
   outgoing: { [string]: { resolve: Function, reject: Function } } = {}
-  constructor(handle: Handle, options: Options = { timeout: Infinity }) {
+  constructor(handle: Handle) {
     invariant(typeof handle === 'object' && handle, 'handle must be a valid object')
     invariant(typeof handle.send === 'function', 'handle.send must be a valid function')
     invariant(typeof handle.listener === 'function', 'handle.listener must be a valid function')
-
-    invariant(typeof options === 'object', 'options must be a valid object')
-    invariant(typeof options.timeout === 'number' && options.timeout > -1, 'options.timeout must be a valid number')
 
     this.alive = true
     this.handle = handle
