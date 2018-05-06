@@ -2,9 +2,9 @@
   "name": "sb-communication",
   "version": "4.0.1",
   "description": "A communication library for communication libraries",
-  "main": "lib/main.js",
+  "main": "lib/index.js",
   "dependencies": {
-    "sb-event-kit": "^1.0.1"
+
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
