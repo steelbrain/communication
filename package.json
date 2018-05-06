@@ -3,18 +3,19 @@
   "version": "4.0.1",
   "description": "A communication library for communication libraries",
   "main": "lib/main.js",
-  "jsnext:main": "src/main.js",
   "dependencies": {
     "sb-event-kit": "^1.0.1"
   },
   "devDependencies": {
-    "babel-preset-steelbrain": "^1.0.0",
-    "babel-preset-steelbrain-legacy": "^1.0.0"
+    "babel-core": "^6.26.3",
+    "babel-preset-steelbrain": "^5.0.3",
+    "eslint-config-steelbrain": "^5.0.2",
+    "sb-babel-cli": "^0.1.1"
   },
   "scripts": {
     "test": "apm test",
-    "compile": "ucompiler go src",
-    "dist": "browserify lib/main.js --standalone EventKit > sb-communication.js && git add sb-communication.js && git commit -m ':arrow_up: Upgrade dist file'"
+    "compile": "sb-babel-cli src -o lib",
+    "watch": "npm run compile -- -w"
   },
   "repository": {
     "type": "git",
