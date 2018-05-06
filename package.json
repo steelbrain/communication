@@ -1,6 +1,6 @@
 {
   "name": "sb-communication",
-  "version": "4.0.1",
+  "version": "5.0.0",
   "description": "A communication library for communication libraries",
   "main": "lib/index.js",
   "dependencies": {},
