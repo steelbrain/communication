@@ -13,22 +13,21 @@ stream, socket or resource though. It works in both browsers and node!
 import Communication from 'sb-communication'
 
 const worker = new WebWorker('worker.js')
-const wrapper = new Communication()
 
-worker.onmessage = function(message) {
-  wrapper.parseMessage(message.data)
-}
-wrapper.onShouldSend(function(data) {
-  worker.postMessage(data)
+const communication = new Communication({
+  listener(callback) {
+    worker.onmessage = callback
+  },
+  send(data) {
+    worker.postMessage = data
+  },
 })
 
 // Event-Specific bindings
-wrapper.onRequest('count-pi', function(data, message) {
+communication.on('count-pi', async function(data) {
+  // ^ Handlers can return Promises or be sync
   console.log(data)
-  message.response = new Promise(function(resolve, reject) {
-    message.response = "Something else"
-    resolve()
-  })
+  return 'Something else'
 })
 ```
 
@@ -36,25 +35,10 @@ wrapper.onRequest('count-pi', function(data, message) {
 
 ```js
 export default class Communication {
-  constructor(debug: Boolean)
-  parseMessage(message: String | Object)
-  request(type: String, data: Mixed)
-  onRequest(type: String, callback: Function)
-  onShouldSend(callback: Function)
+  constructor({ listener: Function, send: Function })
+  on(event, callback)
+  send(event, payload)
   dispose()
-}
-```
-
-#### Message
-This is the shape of the message object you get on request handlers
-
-```js
-const message<T> = {
-  id: String,
-  name: String,
-  type: 'request',
-  data: T,
-  response: ?mixed
 }
 ```
 

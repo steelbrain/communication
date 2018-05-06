@@ -1,0 +1,7 @@
+{
+  "extends": "steelbrain",
+  "root": true,
+  "rules": {
+    "no-underscore-dangle": "off"
+  }
+}
