@@ -39,7 +39,7 @@ class Communication {
       id = Math.random()
         .toString(36)
         .substring(7)
-    } while (!this.outgoing[id])
+    } while (this.outgoing[id])
     return id
   }
   __handleMessage(message: Object) {
@@ -49,6 +49,7 @@ class Communication {
         __sb_communication: true,
         successful: true,
         payload: undefined,
+        type: 'response',
       }
       const handler = this.handlers[message.event]
       if (!handler) {
@@ -69,7 +70,14 @@ class Communication {
           })
           .then(() => {
             if (this.alive) {
-              this.handle.send(message)
+              if (response.payload && typeof response.payload === 'object') {
+                const masked = {}
+                Object.getOwnPropertyNames(response.payload).forEach(function(key) {
+                  masked[key] = response.payload[key]
+                })
+                response.payload = masked
+              }
+              this.handle.send(response)
             }
           })
       }
@@ -104,7 +112,7 @@ class Communication {
         payload,
         type: 'request',
       }
-      this.handlers[message.__sb_id] = { resolve, reject }
+      this.outgoing[message.__sb_id] = { resolve, reject }
       this.handle.send(message)
     })
   }
@@ -113,4 +121,4 @@ class Communication {
   }
 }
 
-export default Communication
+module.exports = Communication

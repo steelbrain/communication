@@ -1,52 +1,48 @@
 'use babel'
 
+import path from 'path'
+import { it } from 'jasmine-fix'
+import childProcess from 'child_process'
+
 import Communication from '../'
 
 describe('SB-Communication', function() {
-  it('works as expected', function() {
-    const first = new Communication()
-    const second = new Communication()
+  let forkedProcess = null
 
-    first.onShouldSend(function(message) {
-      second.parseMessage(message)
-    })
-    second.onShouldSend(function(message) {
-      first.parseMessage(message)
-    })
+  beforeEach(function() {
+    forkedProcess = childProcess.fork(path.join(__dirname, 'worker.js'))
+  })
+  afterEach(function() {
+    if (forkedProcess) {
+      forkedProcess.kill()
+    }
+  })
 
-    first.onRequest('ping1', function(data, message) {
-      message.response = new Promise(function(resolve) {
-        resolve('pong1')
-      })
-    })
-    second.onRequest('ping2', function(data, message) {
-      message.response = 'pong2'
-    })
-
-    first.onRequest('error', function() {
-      throw new Error('An Error')
-    })
-    second.onRequest('error', function(_, message) {
-      message.response = Promise.reject(new Error('Wow'))
+  it('works as expected', async function() {
+    const communication = new Communication({
+      onMessage(callback) {
+        forkedProcess.on('message', callback)
+      },
+      send(message) {
+        forkedProcess.send(message)
+      },
     })
 
-    waitsForPromise(function() {
-      return first.request('ping2').then(function(response) {
-        expect(response).toBe('pong2')
-        return second.request('ping1')
-      }).then(function(response) {
-        expect(response).toBe('pong1')
-        return first.request('error')
-      }).then(function() {
-        expect(false).toBe(true)
-      }, function() {
-        expect(true).toBe(true)
-        return second.request('error')
-      }).then(function() {
-        expect(false).toBe(true)
-      }, function() {
-        expect(true).toBe(true)
-      })
-    })
+    expect(await communication.send('ping', 52)).toBe('pong 52')
+    expect(await communication.send('ping2', 53)).toBe('pong2 53')
+
+    try {
+      await communication.send('ping3', 54)
+      expect(false).toBe(true)
+    } catch (error) {
+      expect(error.message).toBe('pong3 54')
+    }
+
+    try {
+      await communication.send('ping4', 55)
+      expect(false).toBe(true)
+    } catch (error) {
+      expect(error.message).toBe('pong4 55')
+    }
   })
 })
