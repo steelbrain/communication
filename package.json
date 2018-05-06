@@ -19,12 +19,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/steelbrain/SB-Communication.git"
+    "url": "git+ssh://git@github.com/steelbrain/communication.git"
   },
   "author": "steelbrain",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/steelbrain/SB-Communication/issues"
+    "url": "https://github.com/steelbrain/communication/issues"
   },
-  "homepage": "https://github.com/steelbrain/SB-Communication#readme"
+  "homepage": "https://github.com/steelbrain/communication#readme"
 }
