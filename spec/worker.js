@@ -3,7 +3,7 @@
 const Communication = require('../')
 
 const communication = new Communication({
-  onMessage(callback) {
+  listener(callback) {
     process.on('message', callback)
   },
   send(payload) {

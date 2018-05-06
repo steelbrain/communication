@@ -4,7 +4,7 @@ import invariant from 'assert'
 
 type Handle = {|
   send(payload: Object): void,
-  onMessage(callback: (message: Object) => void): void,
+  listener(callback: (message: Object) => void): void,
 |}
 type Options = {|
   timeout: number,
@@ -18,7 +18,7 @@ class Communication {
   constructor(handle: Handle, options: Options = { timeout: Infinity }) {
     invariant(typeof handle === 'object' && handle, 'handle must be a valid object')
     invariant(typeof handle.send === 'function', 'handle.send must be a valid function')
-    invariant(typeof handle.onMessage === 'function', 'handle.onMessage must be a valid function')
+    invariant(typeof handle.listener === 'function', 'handle.listener must be a valid function')
 
     invariant(typeof options === 'object', 'options must be a valid object')
     invariant(typeof options.timeout === 'number' && options.timeout > -1, 'options.timeout must be a valid number')
@@ -26,7 +26,7 @@ class Communication {
     this.alive = true
     this.handle = handle
 
-    this.handle.onMessage(message => {
+    this.handle.listener(message => {
       if (!this.alive || !message.__sb_communication) {
         return
       }

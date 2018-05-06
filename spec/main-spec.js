@@ -20,7 +20,7 @@ describe('SB-Communication', function() {
 
   it('works as expected', async function() {
     const communication = new Communication({
-      onMessage(callback) {
+      listener(callback) {
         forkedProcess.on('message', callback)
       },
       send(message) {
